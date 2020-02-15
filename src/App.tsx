@@ -1,24 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+import { Header } from "./components";
+import ProtectedRoute from './router/protected-route';
 import './App.css';
+import { AccountView, Home, Login, NoMatch } from './pages';
+import { Account } from './lib';
 
 function App() {
+  const acc  = null;
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header/>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+          
+          <ProtectedRoute path={"/account"} account={acc}>
+            <AccountView />
+          </ProtectedRoute>
+
+          <Route >
+            <NoMatch />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }
