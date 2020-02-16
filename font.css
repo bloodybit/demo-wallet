@@ -1,0 +1,18 @@
+@font-face {
+  font-family: 'Battlefin-Black';
+  src: local('Battlefin-Black'),
+    url(./fonts/Battlefin/Battlefin-Black.otf) format('opentype');
+}
+@font-face {
+  font-family: 'NB-International';
+  src: local('NB-International'),
+    url(./fonts/NBInternational/NB-International-Regular-Webfont.ttf)
+      format('truetype');
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-transition-delay: 99999s;
+}

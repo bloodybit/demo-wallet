@@ -8,7 +8,7 @@ export default class Account {
     this.iban = iban;
   };
 
-  async getAccount(id: string) {
-
+  static getAccount(id: string) {
+    return new Account("0315778504", "NL92RABO0315778504");
   }
 }
