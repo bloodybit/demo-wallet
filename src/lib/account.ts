@@ -1,10 +1,14 @@
 
-
 export default class Account {
-  id: String;
-  name: String | null = null;
+  readonly id: string;
+  readonly iban: string;
 
-  constructor(id: String) {
+  constructor(id: string, iban: string) {
     this.id = id;
+    this.iban = iban;
   };
+
+  async getAccount(id: string) {
+
+  }
 }
