@@ -33,8 +33,6 @@ const AccountView: FunctionComponent<AccountViewProps> = ({account}) => {
   const balances = balanceIterator.getCurrent().reverse(); // only load it once
   const [chartHeight, setChartHeight] = useState(0);
   const [chartWidth, setChartWidth] = useState(0);
-
-  console.log(balances);
   
   useEffect( () =>{
     const analyzeScreen = () => {

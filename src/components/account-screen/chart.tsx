@@ -37,8 +37,6 @@ const chartData = (labels: any, data: any) => {return {
 
 const options = {
   responsive: true,
-  onClick: (e: any)=>{console.log(e)},
-  // maintainAspectRatio: false,
   scales: {
     yAxes: [{
         ticks: {
@@ -88,13 +86,12 @@ const Chart: FunctionComponent<ChartPropsType> = ({balances, ...props}) => {
       width={600}
       getElementAtEvent={(e)=>{
         const clickedDate = labels[e[0]._index];
-        console.log(clickedDate);
         scroller.scrollTo(clickedDate, {
           duration: 1500,
           delay: 100,
           smooth: true,
           containerId: 'containerScrollingElement',
-          offset: 50, // Scrolls to element + 50 pixels down the page
+          offset: 25, // Scrolls to element + 50 pixels down the page
         })
       }}
     />
