@@ -57,7 +57,7 @@ function App() {
           </Route>
           
           <ProtectedRoute path={"/account"} account={account}>
-            <AccountView />
+            <AccountView account={account!}/>
           </ProtectedRoute>
 
           <Route >

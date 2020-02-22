@@ -1,5 +1,5 @@
 import statements from '../src/resources/statements';
-import { Transaction } from '../src/lib';
+import { BalanceStore, Transaction } from '../src/lib';
 
 describe("get transactions from statements", () =>{
   it("correctly builds the transactions from statements file", () =>{

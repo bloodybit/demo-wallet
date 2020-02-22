@@ -1,36 +1,56 @@
-import { Account } from '..';
-// import { Balance, BalanceIterator, IBalanceStore} from './';
+import { Account, Transaction } from '..';
+import { Balance, BalanceInfo, BalanceIterator, IBalanceStore } from './';
+import statements from "../../resources/statements";
 
 
 
-
-// export default class BalanceStore implements IBalanceStore {
-
-//   private balanceCache: {[key:string]: Balance[] }= {}
+export default class BalanceStore implements IBalanceStore {
   
-//   getIterator(account: Account, date: Date): BalanceIterator{
+  getIterator(account: Account, date: Date, pullSize: number): BalanceIterator{
+    return new BalanceIterator(this, account, date, pullSize);
+  }
 
-//   }
-//   getBeforeOrEqualDate(beforeOrEqualDate: Date, account: Account): Balance[] {
-//     const entries = this.balanceCache[account.iban.toUpperCase()];
-//     entries.map((balance: Balance) =>{
-//       if(balance.date == beforeOrEqualDate) return balance;
-//     })
-//     Balance.getBeforeDate()
-//   }
+  getBeforeOrEqualDate(account: Account, beforeOrEqualDate: Date, size: number): Balance[] {
+    return statements.reduce((result: Balance[], statement: any) => {
+      if(result.length < size && statement.iban === account.iban) {
+        let currentDate = new Date(statement.date); // I assume that dates are in desc order
+        
+        if(currentDate.getTime() <= beforeOrEqualDate.getTime()) {
+          const transactions =  Transaction.buildTransactionsFromStatement(statement.transactions);
+          
+          const balance = new Balance(
+            new BalanceInfo(
+              statement.balances[1].amount, 
+              statement.balances[1].debit_credit === "credit", 
+              new Date(statement.balances[1].date)
+            ), 
+            new BalanceInfo(
+              statement.balances[0].amount, 
+              statement.balances[0].debit_credit === "credit", 
+              new Date(statement.balances[0].date)
+            ), 
+            transactions
+          );
+          
+          result.push(balance);
+        }
+      }
+      return result;
+    }, [])
+  }
 
-//   save(account: Account, balanceEntries: Balance[]): void{
+  save(account: Account, balanceEntries: Balance[]): void{
+    // TODO()
+  }
 
-//   }
+  getSyncInfo(account: Account): any {
+    // TODO()
+  }
+  saveSyncInfo(account: Account, syncInfo: Balance[]): void {
+    // TODO()
+  }
 
-//   getSyncInfo(account: Account): any {
-
-//   }
-//   saveSyncInfo(account: Account, syncInfo: Balance[]): void {
-
-//   }
-
-//   deleteBalance(accountId: Buffer): void {
-
-//   }
-// }
+  deleteBalance(accountId: Buffer): void {
+    //TODO()
+  }
+}

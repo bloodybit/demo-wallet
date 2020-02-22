@@ -27,24 +27,28 @@ const Login = () => {
   const [error, setError] = useState(false);
 
   const timeout = (time:number) =>{
-    return new Promise((resolve, reject) => setTimeout(() => resolve(new Error('timeout')), time))
+    return new Promise((resolve, _) => setTimeout(() => resolve(new Error('timeout')), time))
   }
   const login = async () => {
     setLoading(true);
-    setError(false)
+    setError(false);
 
-    await timeout(2000); // fake timeout to simulate login
-    if(username === process.env.REACT_APP_USER_MAIL &&
-        password === process.env.REACT_APP_USER_PASSWORD
-    ) {
-      console.log("CORRECT")
-      const account = Account.getAccount("");
-      localStorage.setItem(`account`, JSON.stringify(account))
-      history.push("/account");
-    } else{
-      setError(true);
+    try{
+      await timeout(2000); // fake timeout to simulate login
+    } catch (e) {
+      // this won't ever happen
+    } finally {
+      if(username === process.env.REACT_APP_USER_MAIL &&
+          password === process.env.REACT_APP_USER_PASSWORD
+      ) {
+        const account = Account.getAccount("");
+        localStorage.setItem(`account`, JSON.stringify(account))
+        history.push("/account");
+      } else{
+        setError(true);
+      }
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   const onKeyDown = (e: any) => {

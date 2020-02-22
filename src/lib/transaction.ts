@@ -16,7 +16,7 @@ export default class Transaction {
     this.date = date;
     this.description = description;
   }
-  
+
   static buildTransactionsFromStatement(transactions: any) {
     return transactions.map((transaction: any) => {
       return new Transaction(

@@ -1,12 +1,21 @@
 import statements from '../src/resources/statements';
-import { Balance, BalanceInfo } from '../src/lib/balance';
-import { Transaction } from '../src/lib'
+import { Balance, BalanceInfo, BalanceStore } from '../src/lib/balance';
+import { Transaction, Account } from '../src/lib'
 
 describe("get balance situation before date", () =>{
+  const id = "0315778504";
+  const iban = "NL92RABO0315778504";
+  
+  let account: Account;
+  let balanceStore: BalanceStore;
+
+  beforeAll(() => {
+    account = new Account(id, iban);
+    balanceStore = new BalanceStore();
+  });
+
   it("is able to retrieve the balance on a specific date (or earlier)", () =>{
-    const iban = "NL92RABO0315778504";
-    const balance = Balance.getBeforeOrEqualDate(iban, new Date("2017-07-06"));
-    console.log(new Date("2017-07-06"));
+    const balance = balanceStore.getBeforeOrEqualDate(account, new Date("2017-07-06"), 1);
 
     const expectedBalance = new Balance(
       new BalanceInfo(
@@ -44,8 +53,7 @@ describe("get balance situation before date", () =>{
 
 
   it("retrieve a balance previous a given day" , () => {
-    const iban = "NL92RABO0315778504";
-    const balance = Balance.getBeforeOrEqualDate(iban, new Date("2017-07-15"));
+    const balance = balanceStore.getBeforeOrEqualDate(account, new Date("2017-07-15"), 1);
 
     const expectedBalance = new Balance(
       new BalanceInfo(

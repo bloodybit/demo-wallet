@@ -1,33 +1,39 @@
 import { Account, Transaction } from '..';
-// import { Balance, } from './';
+import { Balance, } from './';
+import { IBalanceStore } from './balance-store-iface';
 
 
-// export default class BalanceIterator{
-//   readonly balanceStore: BalanceStore;
-//   readonly account: Account;
-//   readonly currentDate: Date;
+export default class BalanceIterator{
+  readonly balanceStore: IBalanceStore;
+  readonly account: Account;
+  currentDate: Date;
+  pullSize: number;
 
-//   constructor(account: Account, balanceStore: BalanceStore, currentDate: Date) {
-//     this.account = account;
-//     this.balanceStore = balanceStore;
-//     this.currentDate = currentDate;
-//   }
-//   getCurrent() {
-//     return this.currentDate;
-//   }
+  constructor(balanceStore: IBalanceStore, account: Account, currentDate: Date, pullSize: number) {
+    this.balanceStore = balanceStore;
+    this.account = account;
+    this.currentDate = currentDate;
+    this.pullSize = pullSize;
+  }
+  getCurrent() {
+    const oneDay = 24*60*60*1000;
+    const startDate = new Date(this.currentDate.getTime() - oneDay);
+    return this.balanceStore.getBeforeOrEqualDate(this.account, startDate, this.pullSize);
+  }
 
-//   getNext(): Balance {
-//     // TODO()
-//     // this.balanceStore.getBeforeDate(this.currentDate.getDate() -1,)
-//     return new Balance(new Date(), new Date(), new Date(), []);
-//   }
+  getNext(): Balance[] {
+    // TODO()
+    return []
+  }
   
-//   getPrevious(): Balance {
-//     // TODO()
-//     return new Balance(new Date(), new Date(), new Date(), []);
-//   }
+  getPrevious(): Balance[] {
+    const oneDay = 24*60*60*1000;
+    const previousDays = oneDay - this.pullSize;
+    const startDate = new Date(this.currentDate.getTime() - previousDays);
+    return this.balanceStore.getBeforeOrEqualDate(this.account, startDate, this.pullSize);
+  }
 
-//   getBeforeDate(beforeDate: Date){
-//     // TODO()
-//   }
-// }
+  getBeforeDate(beforeDate: Date){
+    // TODO()
+  }
+}

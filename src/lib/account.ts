@@ -11,4 +11,8 @@ export default class Account {
   static getAccount(id: string) {
     return new Account("0315778504", "NL92RABO0315778504");
   }
+
+  getBalanceByDate() {
+    
+  }
 }
