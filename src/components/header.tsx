@@ -3,6 +3,9 @@ import { Button, Typography, makeStyles } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import { Account } from '../lib';
 
+import { Link as ScrollLink, scrollSpy } from 'react-scroll';
+console.log("REMOVE line above");
+
 const useStyles = makeStyles((theme)=> ({
   center: {
     marginLeft: "auto",
@@ -54,6 +57,9 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
       <Typography variant="h1" align="center">Balance app</Typography>
       {props.account &&
         <div className={classes.floatRight}>
+          <ScrollLink activeClass="active" to="5" spy={true} smooth={true} duration={250} containerId={"containerScrollingElement"}>
+            Go to first element inside container
+          </ScrollLink>
           <Button onClick={logout}>
             Logout
           </Button>

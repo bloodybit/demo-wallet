@@ -7,7 +7,6 @@ import {
           TableContainer, 
           TableHead, 
           TableRow, 
-          Theme, 
           Typography,
           makeStyles,
         } from '@material-ui/core';

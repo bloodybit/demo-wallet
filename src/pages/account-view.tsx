@@ -1,4 +1,5 @@
 import React, {FunctionComponent, useEffect, useState } from 'react';
+import { Element as ScrollElement } from 'react-scroll';
 import { Account, BalanceIterator, BalanceStore } from '../lib';
 import { Chart, MovementsTable } from './../components';
 import { makeStyles } from '@material-ui/core';
@@ -29,9 +30,11 @@ const AccountView: FunctionComponent<AccountViewProps> = ({account}) => {
 
   const balanceStore  = new BalanceStore()
   const balanceIterator = new BalanceIterator(balanceStore, account, new Date(), Number.MAX_VALUE);
-  const balances = balanceIterator.getCurrent(); // only load it once
+  const balances = balanceIterator.getCurrent().reverse(); // only load it once
   const [chartHeight, setChartHeight] = useState(0);
   const [chartWidth, setChartWidth] = useState(0);
+
+  console.log(balances);
   
   useEffect( () =>{
     const analyzeScreen = () => {
@@ -52,11 +55,13 @@ const AccountView: FunctionComponent<AccountViewProps> = ({account}) => {
         <div className={classes.chart} >
           {chartHeight && chartWidth &&  <Chart balances={balances} height={chartHeight} width={chartWidth}/>}
         </div>
-        <div className={classes.tables}>
-          {balances.map(balance => {
-            return <div key={balance.balanceInfo.date.toString()}>
-              <MovementsTable balance={balance}/>
-              </div>
+        <div className={classes.tables} id="containerScrollingElement">
+          {balances.map((balance, i) => {
+            const balanceDate = balance.balanceInfo.date;
+            const scrollerId = `${balanceDate.getDate()}/${balanceDate.getMonth()}/${balanceDate.getFullYear()}`;
+            return <ScrollElement name={scrollerId} key={i.toString()}>
+                <MovementsTable balance={balance}/>
+              </ScrollElement>
           })}
         </div>
       </div>

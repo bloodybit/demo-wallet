@@ -1,7 +1,7 @@
 import React, {FunctionComponent} from 'react';
 import { Balance } from '../../lib';
 import {Line} from 'react-chartjs-2';
-import { Theme, makeStyles } from '@material-ui/core';
+import { scroller } from 'react-scroll';
 
 
 
@@ -37,6 +37,7 @@ const chartData = (labels: any, data: any) => {return {
 
 const options = {
   responsive: true,
+  onClick: (e: any)=>{console.log(e)},
   // maintainAspectRatio: false,
   scales: {
     yAxes: [{
@@ -62,20 +63,41 @@ export type ChartPropsType = {
 
 
 const Chart: FunctionComponent<ChartPropsType> = ({balances, ...props}) => {
-  const labelStart = balances[0].balanceInfo.date;
-  const labelFinish = balances[balances.length-1].balanceInfo.date;
-  const labels = [];
+  const labelStart = balances[balances.length-1].balanceInfo.date;
+  const labelFinish = balances[0].balanceInfo.date;
+  const labels: string[] = [];
   const data = [];
   const tmpBalance = balances.slice(); // I want to clone balances
 
   for(let currentDate = labelStart; currentDate>=labelFinish; currentDate = new Date(currentDate.getTime() - 24*60*60*1000)) {
     const balanceToAdd = tmpBalance.find(balance => balance.balanceInfo.date.getDate() === currentDate.getDate());
     labels.push(`${currentDate.getDate()}/${currentDate.getMonth()}/${currentDate.getFullYear()}`);
-    data.push(balanceToAdd?.balanceInfo.amount);
+    if (balanceToAdd){
+      const negativeNumber = balanceToAdd.balanceInfo.positive? 1 : -1;
+      data.push( balanceToAdd.balanceInfo.amount * negativeNumber);
+    } else {
+      data.push(null);
+    }
   }
 
   return <div>
-    <Line data={chartData(labels, data)} options={options} height={props.height} width={600}/>
+    <Line 
+      data={chartData(labels, data)} 
+      options={options} 
+      height={props.height} 
+      width={600}
+      getElementAtEvent={(e)=>{
+        const clickedDate = labels[e[0]._index];
+        console.log(clickedDate);
+        scroller.scrollTo(clickedDate, {
+          duration: 1500,
+          delay: 100,
+          smooth: true,
+          containerId: 'containerScrollingElement',
+          offset: 50, // Scrolls to element + 50 pixels down the page
+        })
+      }}
+    />
   </div>
 }
 
