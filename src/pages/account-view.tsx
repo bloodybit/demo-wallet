@@ -1,14 +1,14 @@
-import React, {FunctionComponent, useEffect, useState } from 'react';
+import React, {FunctionComponent, useContext, useEffect, useState } from 'react';
 import { Element as ScrollElement } from 'react-scroll';
-import { Account, BalanceIterator, BalanceStore } from '../lib';
+import { AccountContext, BalanceIterator, BalanceStore } from '../lib';
 import { Chart, MovementsTable } from './../components';
 import { makeStyles } from '@material-ui/core';
 
+import { Logout } from './../components';
 export type AccountViewProps = {
-  account: Account,
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme)=> ({
   chart: {
     width: "80%",
     margin: "auto",
@@ -21,12 +21,13 @@ const useStyles = makeStyles({
     marginBottom: 0,
     height: "50vh",
     overflow: "overlay",
-  }
-})
+  },
+}))
 
-const AccountView: FunctionComponent<AccountViewProps> = ({account}) => {
+const AccountView: FunctionComponent<AccountViewProps> = () => {
 
   const classes = useStyles()
+  const account = useContext(AccountContext)!;
 
   const balanceStore  = new BalanceStore()
   const balanceIterator = new BalanceIterator(balanceStore, account, new Date(), Number.MAX_VALUE);
@@ -46,9 +47,9 @@ const AccountView: FunctionComponent<AccountViewProps> = ({account}) => {
     analyzeScreen();
   })
   
-
   return (
     <div>
+      <Logout />
       <div className={classes.splitView} id="split-view">    
         <div className={classes.chart} >
           {chartHeight && chartWidth &&  <Chart balances={balances} height={chartHeight} width={chartWidth}/>}

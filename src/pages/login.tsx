@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import { Button, InputBase, LinearProgress, Typography, makeStyles } from '@material-ui/core';
 import { Account } from '../lib';
@@ -18,6 +18,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+
 const Login = () => {
   const classes = useStyles();
   const history = useHistory();
@@ -34,7 +35,7 @@ const Login = () => {
     setError(false);
 
     try{
-      await timeout(2000); // fake timeout to simulate login
+      // await timeout(2000); // fake timeout to simulate login
     } catch (e) {
       // this won't ever happen
     } finally {

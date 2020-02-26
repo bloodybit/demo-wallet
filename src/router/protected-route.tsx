@@ -1,14 +1,16 @@
-import React, { FunctionComponent, Component } from 'react';
-import { Route, Redirect } from "react-router-dom";
-import { Account } from '../lib';
+import React, { FunctionComponent } from 'react';
+import { Route } from "react-router-dom";
+import { Account, AccountProvider } from '../lib';
 
 type ProtectedRouteProps = {
-  account: Account | null,
   path: string,
 }
+
 const ProtectedRoute: FunctionComponent<ProtectedRouteProps> = (props) => {
   return <Route path={props.path}>
-    {(props.account)? <div>{props.children}</div> : <Redirect to='/login'/>}
+    <AccountProvider>
+      <div>{props.children}</div>
+    </AccountProvider>
   </Route>
 }
 

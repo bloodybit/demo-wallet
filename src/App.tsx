@@ -1,15 +1,8 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
-import { Header } from "./components";
-import ProtectedRoute from './router/protected-route';
+import { Layout } from "./router";
 import './App.css';
 import { makeStyles } from '@material-ui/core/styles';
-import { AccountView, Home, Login, NoMatch } from './pages';
-import { Account } from './lib';
+
 
 
 const useStyles = makeStyles({
@@ -38,33 +31,10 @@ const useStyles = makeStyles({
 
 function App() {
   const classes = useStyles()
-  let account = null;
-  const storage = localStorage.getItem("account");
-  if(storage) {
-    let rawAccount = JSON.parse(storage);
-    account = new Account(rawAccount.id, rawAccount.iban);
-  }
+
   return (
     <div className={classes.padded}>
-      <Router>
-      <Header account={account}/>
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          
-          <ProtectedRoute path={"/account"} account={account}>
-            <AccountView account={account!}/>
-          </ProtectedRoute>
-
-          <Route >
-            <NoMatch />
-          </Route>
-        </Switch>
-      </Router>
+      <Layout />
     </div>
   );
 }
